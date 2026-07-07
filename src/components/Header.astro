@@ -1,0 +1,110 @@
+---
+import { SITE_TITLE, NAV_LINKS } from '../consts';
+import { url } from '../utils';
+
+const current = Astro.url.pathname.replace(/\/$/, '');
+function isActive(href: string) {
+  const target = url(href).replace(/\/$/, '');
+  if (target === url('/').replace(/\/$/, '')) return current === target;
+  return current === target || current.startsWith(target + '/');
+}
+---
+
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href={url('/')}>{SITE_TITLE}</a>
+    <nav aria-label="Principal">
+      {
+        NAV_LINKS.map((link) => (
+          <a
+            href={url(link.href)}
+            class:list={['nav-link', { active: isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <button id="theme-toggle" type="button" aria-label="Cambiar tema">
+        <span class="sun">☀︎</span><span class="moon">☾</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: saturate(180%) blur(6px);
+  }
+  .inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .brand:hover {
+    text-decoration: none;
+    color: var(--accent);
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+  }
+  .nav-link {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-link.active {
+    font-weight: 600;
+  }
+  #theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    line-height: 1;
+    font-size: 0.95rem;
+  }
+  #theme-toggle:hover {
+    border-color: var(--accent);
+  }
+  .moon {
+    display: none;
+  }
+  :global(html.dark) .sun {
+    display: none;
+  }
+  :global(html.dark) .moon {
+    display: inline;
+  }
+</style>
+
+<script is:inline>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const el = document.documentElement;
+    const dark = el.classList.toggle('dark');
+    el.classList.toggle('light', !dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  });
+</script>

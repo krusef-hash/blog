@@ -1,0 +1,45 @@
+name: Deploy a GitHub Pages
+
+on:
+  # Cada push a main dispara build + deploy.
+  push:
+    branches: [main]
+  # Permite lanzarlo manualmente desde la pestaña Actions.
+  workflow_dispatch:
+
+# Permisos que necesita el deploy oficial de GitHub Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Evita despliegues solapados; deja terminar el que esté en curso.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build con Astro
+        uses: withastro/action@v4
+        # Detecta el gestor de paquetes y ejecuta build automáticamente,
+        # subiendo ./dist como artefacto de Pages.
+        # with:
+        #   path: .            # raíz del proyecto Astro (por defecto)
+        #   node-version: 22   # versión de Node (por defecto la LTS)
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

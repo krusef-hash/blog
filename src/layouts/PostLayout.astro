@@ -1,0 +1,67 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { url, formatDate, isoDate } from '../utils';
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+}
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <a class="back muted" href={url('/blog')}>← Volver al blog</a>
+    <h1>{title}</h1>
+    <div class="meta muted">
+      <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+      {
+        updatedDate && (
+          <span>· Actualizado el {formatDate(updatedDate)}</span>
+        )
+      }
+    </div>
+    {
+      tags.length > 0 && (
+        <div class="tags">
+          {tags.map((t) => (
+            <a class="tag" href={url(`/tags/${t}`)}>
+              #{t}
+            </a>
+          ))}
+        </div>
+      )
+    }
+    <div class="content">
+      <slot />
+    </div>
+  </article>
+
+  <style>
+    .back {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    h1 {
+      margin: 0.5rem 0 0.75rem;
+    }
+    .meta {
+      font-size: 0.9rem;
+    }
+    .tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin: 0.9rem 0 1.5rem;
+    }
+    .content :global(h2),
+    .content :global(h3) {
+      scroll-margin-top: 5rem;
+    }
+  </style>
+</BaseLayout>

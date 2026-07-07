@@ -1,0 +1,65 @@
+---
+import { url, formatDate, isoDate } from '../utils';
+
+interface Props {
+  id: string;
+  title: string;
+  description?: string;
+  pubDate: Date;
+  tags: string[];
+}
+
+const { id, title, description, pubDate, tags } = Astro.props;
+---
+
+<article class="post-card">
+  <a class="title" href={url(`/blog/${id}`)}>{title}</a>
+  <div class="meta">
+    <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+    {
+      tags.length > 0 && (
+        <span class="tags">
+          {tags.map((t) => (
+            <a class="tag" href={url(`/tags/${t}`)}>
+              #{t}
+            </a>
+          ))}
+        </span>
+      )
+    }
+  </div>
+  {description && <p class="muted desc">{description}</p>}
+</article>
+
+<style>
+  .post-card {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .title:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.4rem 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .desc {
+    margin: 0.25rem 0 0;
+  }
+</style>

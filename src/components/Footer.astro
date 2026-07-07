@@ -1,0 +1,43 @@
+---
+import { SITE_AUTHOR, SOCIAL_LINKS } from '../consts';
+import { url } from '../utils';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <span class="muted">© {year} {SITE_AUTHOR}</span>
+    <nav aria-label="Enlaces del pie">
+      {
+        SOCIAL_LINKS.map((s) => (
+          <a href={s.href} target="_blank" rel="noopener noreferrer">
+            {s.label}
+          </a>
+        ))
+      }
+      <a href={url('/rss.xml')}>RSS</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+  nav {
+    display: flex;
+    gap: 1rem;
+  }
+</style>
