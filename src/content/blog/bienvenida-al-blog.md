@@ -1,7 +1,7 @@
 ---
 title: "Bienvenida al blog: cómo está montado y cómo escribir aquí"
 description: "Primer post del blog. Explico la estructura del frontmatter, cómo se ven los bloques de código y qué me espera documentar por aquí."
-pubDate: 2026-07-07
+pubDate: 2026-07-06
 tags: ["meta", "astro", "markdown"]
 draft: false
 ---

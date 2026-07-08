@@ -1,7 +1,7 @@
 ---
 title: "Entorno de desarrollo Laravel con Docker Compose"
 description: "Un docker-compose.yml mínimo para levantar Laravel con PHP-FPM, Nginx y MySQL en local, sin ensuciar el sistema."
-pubDate: 2026-07-06
+pubDate: 2026-07-07
 tags: ["docker", "laravel", "php"]
 draft: false
 ---
